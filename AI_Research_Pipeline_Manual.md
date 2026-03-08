@@ -42,6 +42,8 @@ Every substep has either a **Prompt** (paste into LLM) or a **Command** (run in 
 | **8.3** | Edit manuscript | Add data availability statement with GitHub + OSF URLs | Final manuscript |
 
 **What you need before starting:**
+- Git installed (for version control in Steps 5, 8)
+- A GitHub account + personal access token (for Step 8): https://github.com/settings/tokens
 - A Semantic Scholar API key (free): https://www.semanticscholar.org/product/api#api-key-form
 - A Gemini API key (free): https://aistudio.google.com/apikey
 - Zotero installed with browser extension
