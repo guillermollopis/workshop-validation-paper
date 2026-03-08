@@ -37,6 +37,9 @@ Every substep has either a **Prompt** (paste into LLM) or a **Command** (run in 
 | **7.1** | Claude Code → Marp CLI | Generate slide deck from paper + data files | `slides.md` + `slides.html` |
 | **7.2** | Marp CLI + Playwright | Compile to PDF/PPTX | `slides.pdf` / `slides.pptx` |
 | **7.3** | Claude Code (screenshot review) | Validate all tables visible, no overflow, numbers match | Verified slides |
+| **8.1** | Command (git + GitHub API) | Create .gitignore, init repo, commit, create GitHub repo, push | Public GitHub repo |
+| **8.2** | Manual or osfclient | Upload preregistration + dataset to OSF, link GitHub, get DOI | OSF project with DOI |
+| **8.3** | Edit manuscript | Add data availability statement with GitHub + OSF URLs | Final manuscript |
 
 **What you need before starting:**
 - A Semantic Scholar API key (free): https://www.semanticscholar.org/product/api#api-key-form
@@ -1849,24 +1852,152 @@ curl -X POST https://api.gamma.app/v1/presentations \
 
 ## STEP 8: REPRODUCIBILITY
 
-**Tool:** Git (free) + OSF https://osf.io/ (free)
+**Tool:** Git (free) + GitHub CLI or API (free) + OSF https://osf.io/ (free)
 
 **Input:** Code from Step 5, data from experiment, preregistration from Step 4.3.
 
-**Process:**
-- Push code to GitHub repository (should already be version-controlled from Step 5)
-- Upload dataset, preregistration, and supplementary materials to OSF
-- Link OSF project to GitHub repo
-- Add OSF badge and data availability statement to manuscript:
-  ```
-  Data availability statement template:
-  "The dataset, analysis code, and preregistration for this study are
-  available at [OSF URL with DOI]. The stimuli and materials are
-  available at [GitHub URL]."
-  ```
-  Specify any access restrictions and what is included (raw data, processed data, analysis scripts, stimuli).
+### 8.1 Create GitHub Repository (automated)
 
-**Output:** Reproducible, open-science package.
+**Commands:**
+```bash
+# --- 1. Create .gitignore (exclude large/generated files) ---
+cat > .gitignore << 'GITIGNORE'
+# Large generated data (regenerable via pipeline scripts)
+experiment/data/generated/
+experiment/data/normalized/
+experiment/data/vc_output/
+experiment/data/source/*.wav
+experiment/data/source/*.mp4
+experiment/data/reference/
+
+# Cloned tool repositories (installed via setup.sh)
+experiment/tools/repos/
+experiment/tools/models/
+
+# Model weights
+experiment/gfpgan/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Logs and temp
+experiment/logs/
+.DS_Store
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.venv/
+venv/
+GITIGNORE
+
+# --- 2. Initialize repo ---
+git init
+git branch -m main
+git config user.name "YOUR_NAME"
+git config user.email "YOUR_GITHUB_USERNAME@users.noreply.github.com"
+
+# --- 3. Stage files ---
+# Pipeline documentation
+git add AI_Research_Pipeline_Manual.md AI_Research_Pipeline.md .gitignore
+
+# Research step outputs (Steps 1-4)
+git add step*_output.md step*_*.py step*_*.json step*_*.md \
+        zotero_*.py zotero_*.txt 2>/dev/null
+
+# Experiment code and config
+git add experiment/config.yaml experiment/setup.sh experiment/run_experiment.sh
+git add experiment/0*.py experiment/tools/
+
+# Data artifacts (small files only — source frames, transcripts, manifest)
+git add experiment/data/source/*_frame.png \
+        experiment/data/source/manifest.csv \
+        experiment/data/source/transcripts.json
+
+# Results, figures, manuscript, presentation
+git add experiment/results/ experiment/figures/
+git add experiment/manuscript/ experiment/presentation/
+git add experiment/templates/
+
+# --- 4. Commit ---
+git commit -m "Initial commit: [PROJECT TITLE]
+
+[1-2 sentence description of the project and what this repo contains.]
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
+
+# --- 5. Create GitHub repo and push ---
+# Option A: Using GitHub CLI (gh)
+gh auth login --with-token <<< "$GITHUB_TOKEN"
+gh repo create YOUR_REPO_NAME --public \
+  --description "Description of your project" \
+  --source . --push
+
+# Option B: Using GitHub API (if gh is not installed)
+GITHUB_TOKEN="ghp_xxxxxxxxxxxx"
+GITHUB_USER="your_username"
+REPO_NAME="your-repo-name"
+
+curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+  -H "Content-Type: application/json" \
+  https://api.github.com/user/repos \
+  -d "{\"name\": \"$REPO_NAME\", \"description\": \"Project description\", \"private\": false}"
+
+git remote add origin "https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$GITHUB_USER/$REPO_NAME.git"
+git push -u origin main
+```
+
+**What gets pushed (~15-20 MB typical):**
+- Pipeline documentation and research step outputs
+- All Python scripts (pipeline stages 01-06, tools/, setup.sh)
+- Config files (config.yaml, manifest.csv, transcripts.json)
+- Source frames (PNG), results (CSV), figures (PNG+PDF)
+- Manuscript (LaTeX + BibTeX) and presentation (Marp + HTML + PDF)
+
+**What stays local (~20+ GB typical):**
+- Generated audio/video (data/generated/, data/vc_output/, data/normalized/)
+- Source audio/video files (data/source/*.wav, *.mp4)
+- Cloned tool repos (tools/repos/ — Wav2Lip, SadTalker, etc.)
+- Model weights (*.pth, *.pt, *.ckpt)
+
+### 8.2 Upload to OSF (manual or API)
+
+**Manual process:**
+1. Go to https://osf.io/ → Create New Project
+2. Upload: preregistration (step4_3_output.md), dataset (results CSVs), stimuli description
+3. Link GitHub repo: Settings → Add-ons → GitHub → Link repository
+4. Generate a DOI: Settings → Create DOI
+
+**Automated with osfclient (optional):**
+```bash
+pip install osfclient
+osf init  # Creates .osfcli.config
+osf upload experiment/results/ results/
+osf upload step4_3_output.md preregistration/
+```
+
+### 8.3 Add Data Availability Statement
+
+Add to manuscript (typically before References):
+```latex
+\section*{Data Availability}
+The analysis code and computational results are available at
+\url{https://github.com/USERNAME/REPO}.
+The preregistration, dataset, and supplementary materials are
+available at \url{https://osf.io/XXXXX} (DOI: 10.17605/OSF.IO/XXXXX).
+```
+
+**Output:** Public GitHub repository + OSF project with DOI = reproducible, open-science package.
 
 ---
 
@@ -1932,7 +2063,9 @@ STEP 7.1: Claude Code (reads manuscript + CSVs + figures) -> Marp Markdown slide
 STEP 7.2: Marp CLI -> HTML + Playwright -> PDF (25 slides, dark gradient theme)
 STEP 7.3: Claude Code (screenshot review) -> validate tables, overflow, numbers
   |
-STEP 8: Git + OSF -> reproducibility + data availability statement
+STEP 8.1: Git + GitHub API -> create repo, commit code/results/figures/manuscript, push
+STEP 8.2: OSF -> upload preregistration + dataset, link GitHub, generate DOI
+STEP 8.3: Add data availability statement to manuscript
 ```
 
 ---
@@ -1963,9 +2096,10 @@ STEP 8: Git + OSF -> reproducibility + data availability statement
 | **Marp CLI** + Playwright | No | Markdown-to-slides (PDF/PPTX/HTML) with KaTeX math | 7 | Yes (CLI) |
 | **SlideSpeak API** *(optional paid)* | Yes | Premium .PPTX generation via REST API (academic discount) | 7 | Yes (API) |
 | **Gamma API** *(optional paid)* | Yes | KaTeX-aware slide generation, free tier available | 7 | Yes (API) |
-| Git + OSF | No | Reproducibility | 8 | Yes (CLI) |
+| **Git + GitHub API** | No | Version control, public repository | 8.1 | Yes (CLI/API) |
+| **OSF** + osfclient | No | Data hosting, DOI, preregistration | 8.2 | Yes (CLI/API) |
 
-15 out of 19 core tools are fully automated (API, CLI, or pip — no browser interaction needed). The 4 browser-based tools (Consensus, Inciteful, Elicit, Scite) are only used in Steps 2.1-2.4 for literature discovery; everything from Step 3 onward is automated. Two optional paid tools (SlideSpeak, Gamma) are available as premium alternatives for Step 7.
+16 out of 20 core tools are fully automated (API, CLI, or pip — no browser interaction needed). The 4 browser-based tools (Consensus, Inciteful, Elicit, Scite) are only used in Steps 2.1-2.4 for literature discovery; everything from Step 3 onward is automated. Two optional paid tools (SlideSpeak, Gamma) are available as premium alternatives for Step 7.
 
 **Tool replacements from previous version:**
 - NotebookLM → **Gemini File Search API** (same Google backend, now automated via API)
@@ -2011,6 +2145,6 @@ This pipeline is designed for **maximum automation** from Step 3 onward:
 | **Step 5** (implementation) | Fully automated (after plan approval) | ~30 min (review plan + check results) |
 | **Step 6** (writing) | Mostly automated (Gemini ground → Claude draft → tools verify) | ~2-3 hours (run scripts + paste prompts + final human review) |
 | **Step 7** (presentation) | Fully automated (Claude writes Marp Markdown → compile) | ~15 min (one prompt + review slides) |
-| **Step 8** (reproducibility) | Manual: Git push, OSF upload | ~30 min |
+| **Step 8** (reproducibility) | Mostly automated (git + GitHub API + osfclient) | ~15 min (run commands + verify) |
 
 **Total human effort:** ~8-12 hours spread across the full pipeline, from topic to submission-ready manuscript. The computational work (coding, running experiments, generating figures, drafting) is handled by Claude Code.
