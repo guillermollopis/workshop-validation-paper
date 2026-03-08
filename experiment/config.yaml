@@ -1,0 +1,168 @@
+# ============================================================
+# Experiment Configuration
+# Voice Cloning x Lipsync Factorial Benchmark
+# Spanish-language upper-body recordings
+# ============================================================
+
+# --- Source data ---
+source:
+  language: "es"
+  data_dir: "data/source"
+  raw_video_dir: "/home/inab/Desktop/Bruto actores/1080"
+
+  # 5 actors that overlap in INSTRUCCIONES and LLORON (no V1/V2 ambiguity)
+  identities: ["George", "Jordi", "Lisset", "Maisa", "Selene"]
+
+  # Emotion conditions map to subdirectories
+  conditions:
+    neutral:
+      subdir: "INSTRUCCIONES"
+      filename_pattern: "{identity}_INSTRUCCIONES_1920x1080.mp4"
+    emotional:
+      subdir: "LLORÓN"
+      filename_pattern: "{identity}_LLORON_1920x1080.mp4"
+
+  # Clip extraction from ~60s source videos
+  clips_per_video: 2
+  clip_duration: 5          # seconds
+  start_offset: 10          # skip first 10s (setup/intro)
+  clip_gap: 5               # gap between clips
+
+  video_fps: 25
+  audio_sr: 16000
+  transcripts_path: "data/source/transcripts.json"
+
+# --- Face cropping ---
+face_crop:
+  enabled: true
+  target_size: [512, 512]
+  padding_factor: 1.5
+  smooth_window: 7
+  min_detection_rate: 0.3
+
+# --- Voice Cloning Systems ---
+vc_systems:
+  xtts_v2:
+    enabled: true
+    name: "XTTS-v2"
+    package: "TTS"                   # pip install coqui-tts
+    gpu: true
+  knn_vc:
+    enabled: true
+    name: "kNN-VC"
+    package: "torch.hub (bshall/knn-vc)"
+    gpu: true
+  openvoice_v2:
+    enabled: true
+    name: "OpenVoice V2"
+    package: "TTS"                   # same coqui-tts package (voice_conversion model)
+    gpu: true
+  cosyvoice:
+    enabled: true
+    name: "CosyVoice 2"
+    repo: "https://github.com/FunAudioLLM/CosyVoice.git"
+    repo_dir: "tools/repos/CosyVoice"
+    model: "CosyVoice2-0.5B"
+    gpu: true
+
+# --- Lipsync Systems ---
+lipsync_systems:
+  wav2lip:
+    enabled: true
+    name: "Wav2Lip"
+    repo: "https://github.com/Rudrabha/Wav2Lip.git"
+    repo_dir: "tools/repos/Wav2Lip"
+    checkpoint: "tools/repos/Wav2Lip/checkpoints/wav2lip_gan.pth"
+    face_det_checkpoint: "tools/repos/Wav2Lip/face_detection/detection/sfd/s3fd.pth"
+    gpu: true
+  sadtalker:
+    enabled: true
+    name: "SadTalker"
+    repo: "https://github.com/OpenTalker/SadTalker.git"
+    repo_dir: "tools/repos/SadTalker"
+    checkpoint_dir: "tools/repos/SadTalker/checkpoints"
+    size: 512
+    gpu: true
+  video_retalking:
+    enabled: true
+    name: "VideoReTalking"
+    repo: "https://github.com/OpenTalker/video-retalking.git"
+    repo_dir: "tools/repos/video-retalking"
+    checkpoint_dir: "tools/repos/video-retalking/checkpoints"
+    gpu: true
+  musetalk:
+    enabled: false                       # Disabled: mmpose incompatible with Python 3.13
+    name: "MuseTalk"
+    repo: "https://github.com/TMElyralab/MuseTalk.git"
+    repo_dir: "tools/repos/MuseTalk"
+    gpu: true
+
+# --- Stimulus generation ---
+generation:
+  output_dir: "data/generated"
+  vc_output_dir: "data/vc_output"
+  reference_dir: "data/reference"
+  output_resolution: [512, 512]
+  output_fps: 25
+  output_codec: "libx264"
+  output_format: "mp4"
+  clip_duration_sec: 5
+
+# --- Computational metrics ---
+metrics:
+  output_file: "results/all_metrics.csv"
+  whisper_language: "es"
+  whisper_model: "medium"
+  sync:
+    lse_c: true
+    lse_d: true
+    avsu: true
+    avsm: true
+    lmd: true
+  visual:
+    fid: true
+    ssim: true
+    cpbd: true
+  audio:
+    wavlm_sim: true
+    mel_sim: true
+    wer: true
+
+# --- dlib landmark predictor ---
+dlib:
+  predictor_search_paths:
+    - "shape_predictor_68_face_landmarks.dat"
+    - "tools/models/shape_predictor_68_face_landmarks.dat"
+    - "/usr/share/dlib/shape_predictor_68_face_landmarks.dat"
+    - "~/shape_predictor_68_face_landmarks.dat"
+
+# --- Human evaluation ---
+human_eval:
+  app_port: 5000
+  participants_target: 30
+  identities_per_participant: 2
+  ratings:
+    - name: "overall_quality"
+      label: "Overall Quality"
+      scale: [1, 2, 3, 4, 5]
+      anchors: {1: "Very Poor", 2: "Poor", 3: "Fair", 4: "Good", 5: "Excellent"}
+    - name: "lip_sync"
+      label: "Lip Synchronization"
+      scale: [1, 2, 3, 4, 5]
+      anchors: {1: "Completely out of sync", 2: "Mostly out of sync", 3: "Somewhat synchronized", 4: "Well synchronized", 5: "Perfectly synchronized"}
+    - name: "voice_naturalness"
+      label: "Voice Naturalness"
+      scale: [1, 2, 3, 4, 5]
+      anchors: {1: "Robotic/Distorted", 2: "Clearly artificial", 3: "Somewhat natural", 4: "Mostly natural", 5: "Indistinguishable from real"}
+    - name: "visual_naturalness"
+      label: "Visual Naturalness"
+      scale: [1, 2, 3, 4, 5]
+      anchors: {1: "Clearly artificial", 2: "Noticeably artificial", 3: "Somewhat natural", 4: "Mostly natural", 5: "Indistinguishable from real"}
+
+# --- Statistical analysis ---
+analysis:
+  alpha: 0.05
+  fdr_method: "fdr_bh"
+  bootstrap_n: 10000
+  output_dir: "results"
+  figures_dir: "figures"

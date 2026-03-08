@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Quality Evaluation</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+
+        /* Screens */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* Welcome */
+        #welcome { text-align: center; }
+        #welcome p { margin: 10px 0; line-height: 1.6; }
+        .instructions { background: #fff; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: left; }
+        .instructions li { margin: 8px 0; }
+
+        /* Demographics */
+        .form-group { margin: 15px 0; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; }
+        .form-group select, .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+
+        /* Video player */
+        .video-container { text-align: center; margin: 20px 0; background: #000; border-radius: 8px; overflow: hidden; }
+        video { max-width: 100%; max-height: 400px; }
+        .play-count { text-align: center; color: #666; margin: 5px 0; font-size: 13px; }
+
+        /* Rating scales */
+        .rating-section { background: #fff; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .rating-label { font-weight: 600; margin-bottom: 8px; }
+        .rating-description { color: #666; font-size: 13px; margin-bottom: 10px; }
+        .rating-scale { display: flex; justify-content: space-between; gap: 8px; }
+        .rating-btn { flex: 1; padding: 12px 8px; border: 2px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; text-align: center; transition: all 0.15s; font-size: 14px; }
+        .rating-btn:hover { border-color: #4a90d9; background: #f0f6ff; }
+        .rating-btn.selected { border-color: #4a90d9; background: #4a90d9; color: #fff; }
+        .scale-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px; color: #999; }
+
+        /* Progress */
+        .progress-bar { background: #e0e0e0; border-radius: 10px; height: 8px; margin: 15px 0; overflow: hidden; }
+        .progress-fill { background: #4a90d9; height: 100%; transition: width 0.3s; border-radius: 10px; }
+        .progress-text { text-align: center; color: #666; font-size: 13px; }
+
+        /* Buttons */
+        .btn { display: inline-block; padding: 12px 30px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; transition: background 0.15s; }
+        .btn-primary { background: #4a90d9; color: #fff; }
+        .btn-primary:hover { background: #357abd; }
+        .btn-primary:disabled { background: #b0c4de; cursor: not-allowed; }
+        .btn-center { display: block; margin: 20px auto; }
+
+        /* Thank you */
+        #thankyou { text-align: center; padding: 60px 20px; }
+        #thankyou h2 { margin-bottom: 20px; }
+
+        /* Error */
+        .error { color: #d32f2f; text-align: center; margin: 10px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Video Quality Evaluation</h1>
+    <p class="subtitle">Talking-Head Generation Benchmark</p>
+
+    <!-- Welcome Screen -->
+    <div id="welcome" class="screen active">
+        <div class="instructions">
+            <h3>Instructions</h3>
+            <ol>
+                <li>You will watch a series of short talking-head videos.</li>
+                <li>After each video, rate it on <strong>4 dimensions</strong> using a 1-5 scale.</li>
+                <li>Please watch each video <strong>at least once</strong> before rating.</li>
+                <li>Use headphones for best audio quality.</li>
+                <li>The study takes approximately 20-30 minutes.</li>
+            </ol>
+        </div>
+
+        <h3>Demographics</h3>
+        <div class="form-group">
+            <label for="age">Age range</label>
+            <select id="age">
+                <option value="">Select...</option>
+                <option value="18-24">18-24</option>
+                <option value="25-34">25-34</option>
+                <option value="35-44">35-44</option>
+                <option value="45-54">45-54</option>
+                <option value="55+">55+</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender">
+                <option value="">Select...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-binary</option>
+                <option value="prefer-not">Prefer not to say</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="experience">Experience with AI-generated media</label>
+            <select id="experience">
+                <option value="">Select...</option>
+                <option value="none">None</option>
+                <option value="some">Some familiarity</option>
+                <option value="regular">Regular user</option>
+                <option value="expert">Expert / researcher</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="headphones">Are you using headphones?</label>
+            <select id="headphones">
+                <option value="">Select...</option>
+                <option value="yes">Yes</option>
+                <option value="no">No (speakers)</option>
+            </select>
+        </div>
+
+        <div class="error" id="welcome-error"></div>
+        <button class="btn btn-primary btn-center" onclick="startEval()">Begin Evaluation</button>
+    </div>
+
+    <!-- Evaluation Screen -->
+    <div id="evaluation" class="screen">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <p class="progress-text" id="progress-text">Video 1 of ?</p>
+
+        <div class="video-container">
+            <video id="stimulus-video" controls preload="auto">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+        <p class="play-count" id="play-count">Plays: 0</p>
+
+        <div class="rating-section">
+            <div class="rating-label">1. Overall Quality</div>
+            <div class="rating-description">How natural and convincing is this talking-head video overall?</div>
+            <div class="rating-scale" data-dimension="overall_quality">
+                <button class="rating-btn" data-value="1">1</button>
+                <button class="rating-btn" data-value="2">2</button>
+                <button class="rating-btn" data-value="3">3</button>
+                <button class="rating-btn" data-value="4">4</button>
+                <button class="rating-btn" data-value="5">5</button>
+            </div>
+            <div class="scale-labels"><span>Very poor</span><span>Excellent</span></div>
+        </div>
+
+        <div class="rating-section">
+            <div class="rating-label">2. Lip Synchronization</div>
+            <div class="rating-description">How well do the lip movements match the spoken audio?</div>
+            <div class="rating-scale" data-dimension="lip_sync">
+                <button class="rating-btn" data-value="1">1</button>
+                <button class="rating-btn" data-value="2">2</button>
+                <button class="rating-btn" data-value="3">3</button>
+                <button class="rating-btn" data-value="4">4</button>
+                <button class="rating-btn" data-value="5">5</button>
+            </div>
+            <div class="scale-labels"><span>Very poor</span><span>Excellent</span></div>
+        </div>
+
+        <div class="rating-section">
+            <div class="rating-label">3. Voice Naturalness</div>
+            <div class="rating-description">How natural and human-like does the voice sound?</div>
+            <div class="rating-scale" data-dimension="voice_naturalness">
+                <button class="rating-btn" data-value="1">1</button>
+                <button class="rating-btn" data-value="2">2</button>
+                <button class="rating-btn" data-value="3">3</button>
+                <button class="rating-btn" data-value="4">4</button>
+                <button class="rating-btn" data-value="5">5</button>
+            </div>
+            <div class="scale-labels"><span>Very poor</span><span>Excellent</span></div>
+        </div>
+
+        <div class="rating-section">
+            <div class="rating-label">4. Visual Naturalness</div>
+            <div class="rating-description">How natural do the facial expressions and head movements appear?</div>
+            <div class="rating-scale" data-dimension="visual_naturalness">
+                <button class="rating-btn" data-value="1">1</button>
+                <button class="rating-btn" data-value="2">2</button>
+                <button class="rating-btn" data-value="3">3</button>
+                <button class="rating-btn" data-value="4">4</button>
+                <button class="rating-btn" data-value="5">5</button>
+            </div>
+            <div class="scale-labels"><span>Very poor</span><span>Excellent</span></div>
+        </div>
+
+        <div class="error" id="eval-error"></div>
+        <button class="btn btn-primary btn-center" id="submit-btn" onclick="submitRating()" disabled>
+            Submit Rating
+        </button>
+    </div>
+
+    <!-- Thank You Screen -->
+    <div id="thankyou" class="screen">
+        <h2>Thank you!</h2>
+        <p>Your responses have been recorded.</p>
+        <p id="participant-code"></p>
+    </div>
+</div>
+
+<script>
+let state = {
+    participantId: null,
+    totalStimuli: 0,
+    currentRatings: {},
+    playCount: 0,
+    stimulusStartTime: null,
+};
+
+// Rating button handlers
+document.querySelectorAll('.rating-scale').forEach(scale => {
+    scale.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            scale.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const dim = scale.dataset.dimension;
+            state.currentRatings[dim] = parseInt(btn.dataset.value);
+            checkCanSubmit();
+        });
+    });
+});
+
+// Video play counter
+document.getElementById('stimulus-video').addEventListener('play', () => {
+    state.playCount++;
+    document.getElementById('play-count').textContent = `Plays: ${state.playCount}`;
+});
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function checkCanSubmit() {
+    const allRated = ['overall_quality', 'lip_sync', 'voice_naturalness', 'visual_naturalness']
+        .every(d => state.currentRatings[d] !== undefined);
+    const watched = state.playCount >= 1;
+    document.getElementById('submit-btn').disabled = !(allRated && watched);
+}
+
+async function startEval() {
+    const age = document.getElementById('age').value;
+    const gender = document.getElementById('gender').value;
+    const experience = document.getElementById('experience').value;
+    const headphones = document.getElementById('headphones').value;
+
+    if (!age || !gender || !experience || !headphones) {
+        document.getElementById('welcome-error').textContent = 'Please fill in all fields.';
+        return;
+    }
+
+    try {
+        const resp = await fetch('/api/start', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                demographics: { age, gender, experience, headphones }
+            })
+        });
+        const data = await resp.json();
+        state.participantId = data.participant_id;
+        state.totalStimuli = data.total_stimuli;
+
+        showScreen('evaluation');
+        loadNextStimulus();
+    } catch (e) {
+        document.getElementById('welcome-error').textContent = 'Server error. Please try again.';
+    }
+}
+
+async function loadNextStimulus() {
+    try {
+        const resp = await fetch('/api/next');
+        const data = await resp.json();
+
+        if (data.done) {
+            document.getElementById('participant-code').textContent =
+                `Your participant code: ${state.participantId}`;
+            showScreen('thankyou');
+            return;
+        }
+
+        // Update progress
+        const pct = ((data.index) / data.total * 100).toFixed(0);
+        document.getElementById('progress-fill').style.width = pct + '%';
+        document.getElementById('progress-text').textContent =
+            `Video ${data.index + 1} of ${data.total}`;
+
+        // Load video
+        const video = document.getElementById('stimulus-video');
+        video.src = data.video_url;
+        video.load();
+
+        // Reset state
+        state.currentRatings = {};
+        state.playCount = 0;
+        state.stimulusStartTime = Date.now();
+        document.getElementById('play-count').textContent = 'Plays: 0';
+        document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('eval-error').textContent = '';
+    } catch (e) {
+        document.getElementById('eval-error').textContent = 'Error loading video.';
+    }
+}
+
+async function submitRating() {
+    const responseTime = Date.now() - state.stimulusStartTime;
+
+    try {
+        const resp = await fetch('/api/rate', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                overall_quality: state.currentRatings.overall_quality,
+                lip_sync: state.currentRatings.lip_sync,
+                voice_naturalness: state.currentRatings.voice_naturalness,
+                visual_naturalness: state.currentRatings.visual_naturalness,
+                response_time_ms: responseTime,
+            })
+        });
+        const data = await resp.json();
+
+        if (data.success) {
+            loadNextStimulus();
+        } else {
+            document.getElementById('eval-error').textContent = data.error || 'Submit error.';
+        }
+    } catch (e) {
+        document.getElementById('eval-error').textContent = 'Server error. Please try again.';
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# Large generated data (regenerable via pipeline scripts)
+experiment/data/generated/
+experiment/data/normalized/
+experiment/data/vc_output/
+experiment/data/source/*.wav
+experiment/data/source/*.mp4
+experiment/data/reference/
+
+# Cloned tool repositories (installed via setup.sh)
+experiment/tools/repos/
+experiment/tools/models/
+
+# Model weights
+experiment/gfpgan/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+*.so
+
+# Logs
+experiment/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.venv/
+venv/
