@@ -1,0 +1,39 @@
+=== Semantic Scholar Gap Validation Search ===
+Date: Tue Mar  3 09:55:00     2026
+
+-------------------------------------------
+[GAP1] Query: lipsync voice cloning pipeline benchmark
+-------------------------------------------
+-------------------------------------------
+[GAP1] Query: talking head generation end-to-end comparison
+-------------------------------------------
+FAILED after 6 attempts
+
+-------------------------------------------
+[GAP1] Query: audio-driven face synthesis systematic evaluation
+-------------------------------------------
+-------------------------------------------
+[GAP3] Query: emotional speech lipsync quality degradation
+-------------------------------------------
+-------------------------------------------
+[GAP3] Query: voice cloning emotion preservation evaluation
+-------------------------------------------
+-------------------------------------------
+[GAP3] Query: talking head neutral vs emotional benchmark
+-------------------------------------------
+FAILED after 6 attempts
+
+-------------------------------------------
+[GAP5] Query: emotion congruence voice face generated video
+-------------------------------------------
+FAILED after 6 attempts
+
+-------------------------------------------
+[GAP5] Query: audiovisual emotion mismatch deepfake perception
+-------------------------------------------
+FAILED after 6 attempts
+
+-------------------------------------------
+[GAP5] Query: emotional coherence synthetic speech face
+-------------------------------------------
+=== SEARCH COMPLETE ===

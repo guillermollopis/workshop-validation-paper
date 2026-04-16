@@ -1,0 +1,180 @@
+{
+  "stimuli": {
+    "George_emotional_c01": {
+      "source": "data/curated/source/George_emotional_c01.mp4",
+      "fake": "data/curated/fake/George_emotional_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/George_emotional_c01_v0",
+      "rating": "keep"
+    },
+    "George_emotional_c02": {
+      "source": "data/curated/source/George_emotional_c02.mp4",
+      "fake": "data/curated/fake/George_emotional_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "1",
+      "original_id": "knn_vc/sonic/George_emotional_c02_v1",
+      "rating": "keep"
+    },
+    "George_neutral_c01": {
+      "source": "data/curated/source/George_neutral_c01.mp4",
+      "fake": "data/curated/fake/George_neutral_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "1",
+      "original_id": "knn_vc/sonic/George_neutral_c01_v1",
+      "rating": "keep"
+    },
+    "George_neutral_c02": {
+      "source": "data/curated/source/George_neutral_c02.mp4",
+      "fake": "data/curated/fake/George_neutral_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "1",
+      "original_id": "knn_vc/sonic/George_neutral_c02_v1",
+      "rating": "keep"
+    },
+    "Jordi_emotional_c01": {
+      "source": "data/curated/source/Jordi_emotional_c01.mp4",
+      "fake": "data/curated/fake/Jordi_emotional_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "1",
+      "original_id": "knn_vc/sonic/Jordi_emotional_c01_v1",
+      "rating": "keep"
+    },
+    "Jordi_emotional_c02": {
+      "source": "data/curated/source/Jordi_emotional_c02.mp4",
+      "fake": "data/curated/fake/Jordi_emotional_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "2",
+      "original_id": "knn_vc/sonic/Jordi_emotional_c02_v2",
+      "rating": "keep"
+    },
+    "Jordi_neutral_c01": {
+      "source": "data/curated/source/Jordi_neutral_c01.mp4",
+      "fake": "data/curated/fake/Jordi_neutral_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/Jordi_neutral_c01_v0",
+      "rating": "keep"
+    },
+    "Lisset_emotional_c01": {
+      "source": "data/curated/source/Lisset_emotional_c01.mp4",
+      "fake": "data/curated/fake/Lisset_emotional_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "2",
+      "original_id": "knn_vc/sonic/Lisset_emotional_c01_v2",
+      "rating": "keep"
+    },
+    "Lisset_emotional_c02": {
+      "source": "data/curated/source/Lisset_emotional_c02.mp4",
+      "fake": "data/curated/fake/Lisset_emotional_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "2",
+      "original_id": "knn_vc/sonic/Lisset_emotional_c02_v2",
+      "rating": "keep"
+    },
+    "Lisset_neutral_c01": {
+      "source": "data/curated/source/Lisset_neutral_c01.mp4",
+      "fake": "data/curated/fake/Lisset_neutral_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "2",
+      "original_id": "knn_vc/sonic/Lisset_neutral_c01_v2",
+      "rating": "keep"
+    },
+    "Lisset_neutral_c02": {
+      "source": "data/curated/source/Lisset_neutral_c02.mp4",
+      "fake": "data/curated/fake/Lisset_neutral_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/Lisset_neutral_c02_v0",
+      "rating": "keep"
+    },
+    "Maisa_emotional_c01": {
+      "source": "data/curated/source/Maisa_emotional_c01.mp4",
+      "fake": "data/curated/fake/Maisa_emotional_c01.mp4",
+      "vc_system": "openvoice_v2",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "openvoice_v2/sonic/Maisa_emotional_c01_v0",
+      "rating": "keep"
+    },
+    "Maisa_emotional_c02": {
+      "source": "data/curated/source/Maisa_emotional_c02.mp4",
+      "fake": "data/curated/fake/Maisa_emotional_c02.mp4",
+      "vc_system": "openvoice_v2",
+      "lipsync_system": "sonic",
+      "variant": "1",
+      "original_id": "openvoice_v2/sonic/Maisa_emotional_c02_v1",
+      "rating": "keep"
+    },
+    "Maisa_neutral_c01": {
+      "source": "data/curated/source/Maisa_neutral_c01.mp4",
+      "fake": "data/curated/fake/Maisa_neutral_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/Maisa_neutral_c01_v0",
+      "rating": "keep"
+    },
+    "Maisa_neutral_c02": {
+      "source": "data/curated/source/Maisa_neutral_c02.mp4",
+      "fake": "data/curated/fake/Maisa_neutral_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "2",
+      "original_id": "knn_vc/sonic/Maisa_neutral_c02_v2",
+      "rating": "keep"
+    },
+    "Selene_emotional_c01": {
+      "source": "data/curated/source/Selene_emotional_c01.mp4",
+      "fake": "data/curated/fake/Selene_emotional_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/Selene_emotional_c01_v0",
+      "rating": "keep"
+    },
+    "Selene_emotional_c02": {
+      "source": "data/curated/source/Selene_emotional_c02.mp4",
+      "fake": "data/curated/fake/Selene_emotional_c02.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/Selene_emotional_c02_v0",
+      "rating": "keep"
+    },
+    "Selene_neutral_c01": {
+      "source": "data/curated/source/Selene_neutral_c01.mp4",
+      "fake": "data/curated/fake/Selene_neutral_c01.mp4",
+      "vc_system": "knn_vc",
+      "lipsync_system": "sonic",
+      "variant": "0",
+      "original_id": "knn_vc/sonic/Selene_neutral_c01_v0",
+      "rating": "keep"
+    }
+  },
+  "actors": [
+    "George",
+    "Jordi",
+    "Lisset",
+    "Maisa",
+    "Selene"
+  ],
+  "design": {
+    "actors": 5,
+    "emotions": 2,
+    "clips_per_cell": 2,
+    "total_cells": 18,
+    "lipsync": "sonic"
+  }
+}
