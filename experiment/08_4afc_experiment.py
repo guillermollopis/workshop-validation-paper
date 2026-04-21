@@ -59,14 +59,14 @@ ADMIN_KEY = os.environ.get("ADMIN_KEY", "pilot2026")
 
 # ── Condition labels ──────────────────────────────────────────────
 CONDITION_LABELS = {
-    "real_fake_emotional": "Real–Fake Emotional",
-    "real_fake_neutral": "Real–Fake Neutral",
-    "fake_fake_emotional": "Fake–Fake Emotional",
-    "fake_fake_neutral": "Fake–Fake Neutral",
-    "single_real_emotional": "Single Real Emotional",
-    "single_real_neutral": "Single Real Neutral",
-    "single_fake_emotional": "Single Fake Emotional",
-    "single_fake_neutral": "Single Fake Neutral",
+    "real_fake_emotional": "Real–IA Emocional",
+    "real_fake_neutral": "Real–IA Neutral",
+    "fake_fake_emotional": "IA–IA Emocional",
+    "fake_fake_neutral": "IA–IA Neutral",
+    "single_real_emotional": "Individual Real Emocional",
+    "single_real_neutral": "Individual Real Neutral",
+    "single_fake_emotional": "Individual IA Emocional",
+    "single_fake_neutral": "Individual IA Neutral",
 }
 
 # ── Correct-answer mapping ────────────────────────────────────────
@@ -426,7 +426,7 @@ HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Experimento: Identificación de Videos</title>
+<title>Experimento: Identificación de Vídeos</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -442,15 +442,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 #welcome h1 { font-size: 32px; margin-bottom: 8px;
               background: linear-gradient(135deg, #4a90d9, #64ffda);
               -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-#welcome .sub { color: #888; margin-bottom: 30px; font-size: 14px; }
-#welcome p { margin: 10px auto; max-width: 600px; line-height: 1.7; color: #bbb; font-size: 15px; }
+#welcome .sub { color: #bbb; margin-bottom: 30px; font-size: 14px; }
+#welcome p { margin: 10px auto; max-width: 600px; line-height: 1.7; color: #ddd; font-size: 15px; }
 .highlight { color: #64ffda; font-weight: 600; }
 
 /* ── Demographics ── */
 #demographics { max-width: 500px; margin: 0 auto; padding-top: 20px; }
 #demographics h2 { text-align: center; margin-bottom: 20px; color: #64ffda; }
 .form-group { margin-bottom: 18px; }
-.form-group label { display: block; margin-bottom: 6px; color: #aaa; font-size: 14px; }
+.form-group label { display: block; margin-bottom: 6px; color: #ccc; font-size: 14px; }
 .form-group input, .form-group select {
     width: 100%; padding: 10px 14px; border: 2px solid #333; border-radius: 8px;
     background: #1a1a2e; color: #eee; font-size: 15px; outline: none; }
@@ -460,7 +460,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 .progress-bar { background: #222; border-radius: 10px; height: 6px; margin: 12px 0; overflow: hidden; }
 .progress-fill { background: linear-gradient(90deg, #4a90d9, #64ffda); height: 100%;
                  transition: width 0.4s; border-radius: 10px; }
-.progress-text { text-align: center; color: #666; font-size: 13px; }
+.progress-text { text-align: center; color: #bbb; font-size: 13px; }
 .condition-tag { text-align: center; margin: 8px 0 12px; }
 .condition-tag span { background: #1a2a4e; color: #4a90d9; padding: 4px 14px;
                       border-radius: 20px; font-size: 12px; font-weight: 600;
@@ -488,29 +488,29 @@ video { width: 100%; display: block; object-fit: contain; }
 
 /* ── Emotion question ── */
 .emotion-section { text-align: center; margin: 14px 0; }
-.emotion-label { color: #888; font-size: 14px; margin-bottom: 8px; }
+.emotion-label { color: #ddd; font-size: 14px; margin-bottom: 8px; font-weight: 600; }
 .emotion-row { display: flex; gap: 12px; justify-content: center; }
-.emotion-btn { padding: 8px 24px; border: 2px solid #333; border-radius: 8px;
-               background: #16213e; color: #777; cursor: pointer; font-size: 14px;
+.emotion-btn { padding: 8px 24px; border: 2px solid #444; border-radius: 8px;
+               background: #16213e; color: #ccc; cursor: pointer; font-size: 14px;
                transition: all 0.15s; }
 .emotion-btn:hover { border-color: #4a90d9; }
 .emotion-btn.selected { border-color: #4a90d9; background: #1a2a4e; color: #fff; }
 
 /* ── Playback controls ── */
-.playback-info { text-align: center; color: #555; font-size: 12px; margin: 4px 0;
+.playback-info { text-align: center; color: #aaa; font-size: 12px; margin: 4px 0;
                  min-height: 18px; }
 .play-controls { display: flex; gap: 10px; justify-content: center; margin: 8px 0; }
-.play-btn { padding: 8px 20px; border: 2px solid #333; border-radius: 8px;
-            background: #16213e; color: #aaa; cursor: pointer; font-size: 13px;
+.play-btn { padding: 8px 20px; border: 2px solid #555; border-radius: 8px;
+            background: #16213e; color: #ddd; cursor: pointer; font-size: 13px;
             transition: all 0.15s; }
 .play-btn:hover { border-color: #4a90d9; color: #fff; }
 
 /* ── Choice buttons ── */
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
            max-width: 700px; margin: 16px auto; }
-.choice-btn { padding: 16px 12px; border: 3px solid #333; border-radius: 10px;
+.choice-btn { padding: 16px 12px; border: 3px solid #444; border-radius: 10px;
               background: #12122a; cursor: pointer; text-align: center;
-              transition: all 0.2s; font-size: 15px; font-weight: 600; }
+              transition: all 0.2s; font-size: 15px; font-weight: 600; color: #ddd; }
 .choice-btn:hover { transform: scale(1.02); border-color: #555; }
 .choice-btn.sel-a { border-color: #ff9f43; background: #2a1f10; color: #ff9f43; }
 .choice-btn.sel-b { border-color: #a29bfe; background: #1a1a3e; color: #a29bfe; }
@@ -521,10 +521,10 @@ video { width: 100%; display: block; object-fit: contain; }
 
 /* ── Confidence ── */
 .conf-section { text-align: center; margin: 10px 0; }
-.conf-label { color: #555; font-size: 12px; margin-bottom: 6px; }
+.conf-label { color: #ccc; font-size: 14px; margin-bottom: 8px; font-weight: 600; }
 .conf-row { display: flex; gap: 10px; justify-content: center; }
-.conf-btn { padding: 6px 16px; border: 2px solid #333; border-radius: 8px;
-            background: #16213e; color: #777; cursor: pointer; font-size: 12px;
+.conf-btn { padding: 8px 18px; border: 2px solid #444; border-radius: 8px;
+            background: #16213e; color: #ccc; cursor: pointer; font-size: 13px;
             transition: all 0.15s; }
 .conf-btn:hover { border-color: #4a90d9; }
 .conf-btn.selected { border-color: #4a90d9; background: #1a2a4e; color: #fff; }
@@ -565,8 +565,11 @@ tr:hover td { background: #12122a; }
 .bar-bad { background: linear-gradient(90deg, #e74c3c, #ff6b6b); }
 h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
 .insight { background: #1a1a2e; border-left: 3px solid #4a90d9; padding: 12px 16px;
-           margin: 12px 0; border-radius: 0 8px 8px 0; font-size: 14px; color: #bbb;
+           margin: 12px 0; border-radius: 0 8px 8px 0; font-size: 14px; color: #ddd;
            line-height: 1.6; }
+
+/* ── Cursor hide during fixation/playback ── */
+.cursor-hidden, .cursor-hidden * { cursor: none !important; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
@@ -584,31 +587,53 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
 
 <!-- ════ WELCOME ════ -->
 <div id="welcome" class="screen active">
-    <h1>Identificación de Videos Reales y Generados</h1>
+    <h1>Identificación de Vídeos Reales y Generados por IA</h1>
     <p class="sub">Experimento de percepción — Avatar v2</p>
+
+    <p style="max-width:580px; margin:12px auto; font-size:16px; color:#64ffda; font-weight:600;">
+        🎯 Al finalizar, recibirás un diagnóstico sobre tu capacidad para detectar vídeos generados por IA.</p>
+
     <div id="welcome-mixed">
-    <p>Verás dos tipos de ensayos:</p>
-    <p style="text-align:left; max-width:500px; margin:15px auto;">
-        <span class="highlight">Ensayos con 2 videos:</span> Verás dos videos de la misma persona.
-        Debes decidir cuál es real, o si ambos son falsos.<br><br>
-        <span class="highlight">Ensayos con 1 video:</span> Verás un solo video y debes decidir
-        si es <strong>real</strong> o <strong>generado por IA</strong>.
+    <p><strong>Verás dos tipos de bloques:</strong></p>
+    <p style="text-align:left; max-width:520px; margin:15px auto; background:#1a1a2e; padding:16px; border-radius:10px;">
+        <span class="highlight">Bloques con 2 vídeos:</span> Verás dos vídeos de la misma persona.
+        Debes decidir cuál es <strong>real</strong>, o si ambos son <strong>generados por IA</strong>.<br><br>
+        <span class="highlight">Bloques con 1 vídeo:</span> Verás un solo vídeo y debes decidir
+        si es <strong>real</strong> o <strong>generado por inteligencia artificial</strong>.
     </p>
-    <p style="color:#666; font-size:13px; margin-top:20px;">
-        En los ensayos con dos videos, algunos pares contienen un video real y uno generado por IA,
-        y otros contienen dos videos generados por IA.<br>
-        Después de cada ensayo indicarás tu nivel de confianza y si percibiste emoción.</p>
+    <p style="color:#bbb; font-size:14px; margin-top:12px; max-width:520px; margin-left:auto; margin-right:auto;">
+        En los bloques con dos vídeos, algunos pares contienen un vídeo real y uno generado por IA,
+        y otros contienen dos vídeos generados por IA.<br>
+        Después de cada bloque indicarás tu nivel de confianza y si percibiste emoción.</p>
     </div>
     <div id="welcome-2afc" style="display:none;">
     <p style="max-width:550px; margin:15px auto; line-height:1.7;">
-        En cada ensayo verás <span class="highlight">un video corto</span> de una persona hablando.
-        Tu tarea es decidir si el video es <strong>real</strong> o <strong>generado por inteligencia artificial</strong>.
+        En cada bloque verás <span class="highlight">un vídeo corto</span> de una persona hablando.
+        Tu tarea es decidir si el vídeo es <strong>real</strong> o <strong>generado por inteligencia artificial</strong>.
     </p>
-    <p style="color:#666; font-size:13px; margin-top:20px; max-width:500px; margin-left:auto; margin-right:auto;">
-        Algunos videos son grabaciones reales y otros han sido creados con IA.<br>
-        Después de cada ensayo indicarás tu nivel de confianza y si percibiste emoción en el video.</p>
+    <p style="color:#bbb; font-size:14px; margin-top:12px; max-width:500px; margin-left:auto; margin-right:auto;">
+        Algunos vídeos son grabaciones reales y otros han sido creados con IA.<br>
+        Después de cada bloque indicarás tu nivel de confianza y si percibiste emoción en el vídeo.</p>
     </div>
-    <p style="color:#555; font-size:13px;" id="trial-count"></p>
+
+    <div style="max-width:560px; margin:16px auto; background:#1a2a1a; border:1px solid #2ecc71; border-radius:10px; padding:14px 18px; text-align:left;">
+        <p style="color:#2ecc71; font-weight:700; margin-bottom:8px;">Antes de empezar:</p>
+        <ul style="color:#ccc; font-size:14px; line-height:1.9; padding-left:20px;">
+            <li><strong>Usa auriculares</strong> para una mejor experiencia de audio.</li>
+            <li>Para juzgar si un vídeo es real o generado por IA, <strong>céntrate en lo que ves</strong>, no en lo que oyes.</li>
+            <li><strong>Solo tendrás una oportunidad</strong> de ver cada vídeo — no podrás repetirlo.</li>
+            <li>Antes de cada vídeo aparecerá una <strong>cruz de fijación (+)</strong>. Mantén la mirada en ella y en el botón de reproducción.</li>
+        </ul>
+    </div>
+
+    <div style="max-width:560px; margin:10px auto; background:#1a1a2a; border:1px solid #4a90d9; border-radius:10px; padding:12px 18px; text-align:left;">
+        <p style="color:#8ab4f8; font-size:13px; margin:0;">
+            <strong>Nota técnica:</strong> La calidad visual y de audio de los vídeos ha sido modificada aleatoriamente de forma intencionada.
+            No utilices la calidad técnica como señal para identificar vídeos reales o generados por IA.
+        </p>
+    </div>
+
+    <p style="color:#888; font-size:13px;" id="trial-count"></p>
     <button class="btn-primary" onclick="showScreen('consent')">Comenzar</button>
 </div>
 
@@ -620,18 +645,20 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
         <div style="background:#1a1a2e; border-radius:10px; padding:20px; margin-bottom:20px;
                     max-height:350px; overflow-y:auto; border:1px solid #333; font-size:14px;
                     line-height:1.8; color:#bbb;">
-            <p><strong style="color:#eee;">Título del estudio:</strong> Percepción humana de videos
-               generados por inteligencia artificial — Paradigma de identificación real/falso.</p>
+            <p><strong style="color:#eee;">Título del estudio:</strong> Percepción humana de vídeos
+               generados por inteligencia artificial — Paradigma de identificación real/generado por IA.</p>
 
             <p><strong style="color:#eee;">Objetivo:</strong> Evaluar la capacidad de las personas para
-               distinguir entre videos reales y videos generados por sistemas de inteligencia artificial.</p>
+               distinguir entre vídeos reales y vídeos generados por sistemas de inteligencia artificial.</p>
 
-            <p><strong style="color:#eee;">Procedimiento:</strong> Se te presentarán pares de videos cortos
-               (~5 segundos) de personas hablando. En cada ensayo, deberás indicar cuál video consideras
-               real, o si ambos son reales o falsos. El experimento dura aproximadamente 15-20 minutos.</p>
+            <p><strong style="color:#eee;">Procedimiento:</strong> Se te presentarán vídeos cortos
+               (~5 segundos) de personas hablando. Según el diseño del experimento, verás:
+               (1) un solo vídeo por bloque, donde deberás indicar si es real o generado por IA; o
+               (2) dos vídeos por bloque, donde deberás indicar cuál es real o si ambos son generados por IA.
+               El experimento dura aproximadamente 15-20 minutos.</p>
 
             <p><strong style="color:#eee;">Riesgos:</strong> Este estudio no presenta riesgos conocidos
-               más allá de los asociados con el uso habitual de un ordenador. Algunos videos pueden
+               más allá de los asociados con el uso habitual de un ordenador. Algunos vídeos pueden
                mostrar expresiones emocionales (tristeza, alegría).</p>
 
             <p><strong style="color:#eee;">Confidencialidad:</strong> Tus respuestas serán almacenadas
@@ -644,7 +671,8 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
                necesidad de justificación y sin consecuencia alguna.</p>
 
             <p><strong style="color:#eee;">Contacto:</strong> Para preguntas sobre el estudio,
-               contacta al equipo de investigación.</p>
+               contacta al investigador principal:
+               <a href="mailto:g.llopis@inablab.org" style="color:#64ffda;">g.llopis@inablab.org</a>.</p>
         </div>
 
         <div style="margin-bottom:16px;">
@@ -737,79 +765,59 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
 
         <!-- Video A phase -->
         <div id="phase-a" style="display:none;">
-            <div class="video-label a" style="text-align:center; font-size:20px; margin-bottom:8px;">
-                VIDEO A</div>
+            <div class="video-label a" style="text-align:center; font-size:20px; margin-bottom:8px;"
+                 id="label-phase-a">VÍDEO A</div>
             <div class="video-wrap" id="wrap-a">
                 <video id="vid-a" preload="auto" playsinline></video>
             </div>
-            <div class="playback-info" id="play-info-a" style="text-align:center; color:#888;
+            <div class="playback-info" id="play-info-a" style="text-align:center; color:#aaa;
                  font-size:13px; margin:8px 0; min-height:20px;"></div>
         </div>
 
         <!-- Video B phase -->
         <div id="phase-b" style="display:none;">
             <div class="video-label b" style="text-align:center; font-size:20px; margin-bottom:8px;">
-                VIDEO B</div>
+                VÍDEO B</div>
             <div class="video-wrap" id="wrap-b">
                 <video id="vid-b" preload="auto" playsinline></video>
             </div>
-            <div class="playback-info" id="play-info-b" style="text-align:center; color:#888;
+            <div class="playback-info" id="play-info-b" style="text-align:center; color:#aaa;
                  font-size:13px; margin:8px 0; min-height:20px;"></div>
         </div>
 
-        <!-- Decision phase: show both thumbnails as stills for reference -->
+        <!-- Decision phase: no preview — one chance only -->
         <div id="phase-decide" style="display:none;">
-            <p style="text-align:center; color:#888; font-size:14px; margin-bottom:12px;">
-                Has visto ambos videos. Elige tu respuesta.</p>
-            <div class="video-pair" style="display:flex; gap:12px; justify-content:center;">
-                <div style="flex:1; text-align:center;">
-                    <div class="video-label a" style="font-size:14px; margin-bottom:4px;">VIDEO A</div>
-                    <div class="video-wrap" id="wrap-a-thumb" style="border-width:2px; cursor:pointer;"
-                         onclick="replayOne('a')">
-                        <video id="vid-a-thumb" preload="auto" playsinline muted
-                               style="max-height:180px;"></video>
-                    </div>
-                    <div style="color:#555; font-size:11px; margin-top:4px;">clic para repetir</div>
-                </div>
-                <div style="flex:1; text-align:center;">
-                    <div class="video-label b" style="font-size:14px; margin-bottom:4px;">VIDEO B</div>
-                    <div class="video-wrap" id="wrap-b-thumb" style="border-width:2px; cursor:pointer;"
-                         onclick="replayOne('b')">
-                        <video id="vid-b-thumb" preload="auto" playsinline muted
-                               style="max-height:180px;"></video>
-                    </div>
-                    <div style="color:#555; font-size:11px; margin-top:4px;">clic para repetir</div>
-                </div>
-            </div>
+            <p style="text-align:center; color:#bbb; font-size:15px; margin:16px 0; font-weight:600;">
+                Has visto ambos vídeos. Elige tu respuesta a continuación.</p>
         </div>
     </div>
 
     <!-- Play / Next controls (paired trials) -->
     <div class="play-controls" id="play-controls">
         <button class="play-btn" id="btn-play" onclick="playSequential()" style="padding:10px 30px;
-                font-size:15px;">&#9654; Reproducir Video A</button>
+                font-size:15px;">&#9654; Reproducir Vídeo A</button>
     </div>
 
     <!-- Single-video play button -->
     <div id="single-play-controls" style="display:none; text-align:center; margin:8px 0;">
         <button class="play-btn" id="btn-play-single" onclick="playSingleVideo()" style="padding:10px 30px;
-                font-size:15px;">&#9654; Reproducir Video</button>
+                font-size:15px;">&#9654; Reproducir Vídeo</button>
     </div>
 
     <!-- Choices for PAIRED trials (hidden until both videos watched) -->
     <div id="choices-section" style="display:none;">
         <div class="choices" id="paired-choices">
             <div class="choice-btn" data-choice="video_a" onclick="pick('video_a')">
-                El <strong style="color:#ff9f43">Video A</strong> es real
+                El <strong style="color:#ff9f43">Vídeo A</strong> es real
             </div>
             <div class="choice-btn" data-choice="video_b" onclick="pick('video_b')">
-                El <strong style="color:#a29bfe">Video B</strong> es real
+                El <strong style="color:#a29bfe">Vídeo B</strong> es real
             </div>
             <div class="choice-btn" data-choice="both_real" onclick="pick('both_real')">
                 <strong style="color:#2ecc71">Ambos</strong> son reales
             </div>
             <div class="choice-btn" data-choice="both_fake" onclick="pick('both_fake')">
-                <strong style="color:#e74c3c">Ambos</strong> son falsos
+                <strong style="color:#e74c3c">Ambos</strong> son generados por IA
             </div>
         </div>
 
@@ -818,17 +826,18 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
             <div style="display:flex; gap:20px; justify-content:center; max-width:500px; margin:0 auto;">
                 <div class="choice-btn" data-choice="real" onclick="pick('real')"
                      style="flex:1; color:#64ffda;">
-                    <strong>REAL</strong><br><span style="font-size:12px; font-weight:400; color:#888;">Video original</span>
+                    <strong>REAL</strong><br><span style="font-size:13px; font-weight:400; color:#bbb;">Vídeo original</span>
                 </div>
                 <div class="choice-btn" data-choice="fake" onclick="pick('fake')"
                      style="flex:1; color:#ff6b6b;">
-                    <strong>GENERADO</strong><br><span style="font-size:12px; font-weight:400; color:#888;">Creado por IA</span>
+                    <strong>GENERADO POR IA</strong><br><span style="font-size:13px; font-weight:400; color:#bbb;">Creado con inteligencia artificial</span>
                 </div>
             </div>
         </div>
 
-        <div class="conf-section">
-            <div class="conf-label">&#191;Qu&eacute; tan seguro/a est&aacute;s?</div>
+        <!-- Confidence for SINGLE trials -->
+        <div class="conf-section" id="conf-single">
+            <div class="conf-label">¿Qué tan seguro/a estás?</div>
             <div class="conf-row">
                 <div class="conf-btn" data-c="1" onclick="setConf(1)">Adivinando</div>
                 <div class="conf-btn" data-c="2" onclick="setConf(2)">Algo seguro/a</div>
@@ -836,9 +845,29 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
             </div>
         </div>
 
-        <!-- Emotion perception question (shown with choice+confidence) -->
+        <!-- Confidence for PAIRED trials — separate per video -->
+        <div id="conf-paired" style="display:none;">
+            <div class="conf-section">
+                <div class="conf-label">¿Qué tan seguro/a estás sobre el <strong style="color:#ff9f43;">Vídeo A</strong>?</div>
+                <div class="conf-row">
+                    <div class="conf-btn" data-ca="1" onclick="setConfA(1)">Adivinando</div>
+                    <div class="conf-btn" data-ca="2" onclick="setConfA(2)">Algo seguro/a</div>
+                    <div class="conf-btn" data-ca="3" onclick="setConfA(3)">Muy seguro/a</div>
+                </div>
+            </div>
+            <div class="conf-section">
+                <div class="conf-label">¿Qué tan seguro/a estás sobre el <strong style="color:#a29bfe;">Vídeo B</strong>?</div>
+                <div class="conf-row">
+                    <div class="conf-btn" data-cb="1" onclick="setConfB(1)">Adivinando</div>
+                    <div class="conf-btn" data-cb="2" onclick="setConfB(2)">Algo seguro/a</div>
+                    <div class="conf-btn" data-cb="3" onclick="setConfB(3)">Muy seguro/a</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emotion perception question -->
         <div class="emotion-section" id="emotion-section">
-            <div class="emotion-label">&iquest;Percibiste emoci&oacute;n en el v&iacute;deo?</div>
+            <div class="emotion-label" id="emotion-label">¿Percibiste emoción en el vídeo?</div>
             <div class="emotion-row">
                 <div class="emotion-btn" data-emo="neutral" onclick="setEmotion('neutral')">Neutral</div>
                 <div class="emotion-btn" data-emo="emotional" onclick="setEmotion('emotional')">Emocional</div>
@@ -863,7 +892,11 @@ h3 { margin: 22px 0 8px; color: #64ffda; font-size: 15px; }
 
 <script>
 const S = {
-    choice: null, confidence: null, emotion_perceived: null,
+    choice: null,
+    confidence: null,    // single trials
+    confidence_a: null,  // paired trials — Vídeo A
+    confidence_b: null,  // paired trials — Vídeo B
+    emotion_perceived: null,
     idx: 0, total: 0,
     answers: [],
     playCount: 0,
@@ -935,29 +968,35 @@ function pick(c) {
         real:'sel-real', fake:'sel-fake',
     };
     document.querySelector(`[data-choice="${c}"]`).classList.add(classes[c] || '');
-    // Highlight thumbnail borders in decision phase (paired only)
-    if (S.trialType === 'paired') {
-        const wrapA = document.getElementById('wrap-a-thumb');
-        const wrapB = document.getElementById('wrap-b-thumb');
-        if (wrapA && wrapB) {
-            wrapA.className = 'video-wrap' +
-                (c === 'video_a' ? ' selected-a' : c === 'both_real' || c === 'both_fake' ? ' selected-both' : '');
-            wrapB.className = 'video-wrap' +
-                (c === 'video_b' ? ' selected-b' : c === 'both_real' || c === 'both_fake' ? ' selected-both' : '');
-        }
-    }
     checkReady();
 }
 
 function setConf(c) {
     S.confidence = c;
-    document.querySelectorAll('.conf-btn').forEach(b => b.classList.remove('selected'));
-    document.querySelector(`.conf-btn[data-c="${c}"]`).classList.add('selected');
+    document.querySelectorAll('#conf-single .conf-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`#conf-single .conf-btn[data-c="${c}"]`).classList.add('selected');
+    checkReady();
+}
+
+function setConfA(c) {
+    S.confidence_a = c;
+    document.querySelectorAll('[data-ca]').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`[data-ca="${c}"]`).classList.add('selected');
+    checkReady();
+}
+
+function setConfB(c) {
+    S.confidence_b = c;
+    document.querySelectorAll('[data-cb]').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`[data-cb="${c}"]`).classList.add('selected');
     checkReady();
 }
 
 function checkReady() {
-    document.getElementById('btn-submit').disabled = !(S.choice && S.confidence && S.emotion_perceived);
+    const confOk = S.trialType === 'paired'
+        ? (S.confidence_a && S.confidence_b)
+        : S.confidence;
+    document.getElementById('btn-submit').disabled = !(S.choice && confOk && S.emotion_perceived);
 }
 
 function setEmotion(val) {
@@ -971,7 +1010,11 @@ function showFixation(durationMs) {
     return new Promise(resolve => {
         const el = document.getElementById('fixation-cross');
         el.classList.add('visible');
-        setTimeout(() => { el.classList.remove('visible'); resolve(); }, durationMs);
+        document.body.classList.add('cursor-hidden');
+        setTimeout(() => {
+            el.classList.remove('visible');
+            resolve();
+        }, durationMs);
     });
 }
 
@@ -999,11 +1042,11 @@ function setPhase(phase) {
     const controls = document.getElementById('play-controls');
     if (phase === 'ready') {
         controls.style.display = 'flex';
-        btn.textContent = '▶ Reproducir Video A';
+        btn.textContent = '▶ Reproducir Vídeo A';
         btn.onclick = () => playSequential();
     } else if (phase === 'waiting_b') {
         controls.style.display = 'flex';
-        btn.textContent = '▶ Reproducir Video B';
+        btn.textContent = '▶ Reproducir Vídeo B';
         btn.onclick = () => playVideoB();
     } else if (phase === 'deciding') {
         controls.style.display = 'none';
@@ -1023,6 +1066,7 @@ async function playSequential() {
     document.getElementById('play-info-a').textContent = 'Reproduciendo...';
 
     vidA.onended = () => {
+        document.body.classList.remove('cursor-hidden');
         document.getElementById('play-info-a').textContent = 'Completado';
         setPhase('waiting_b');
     };
@@ -1038,6 +1082,7 @@ async function playVideoB() {
     document.getElementById('play-info-b').textContent = 'Reproduciendo...';
 
     vidB.onended = () => {
+        document.body.classList.remove('cursor-hidden');
         document.getElementById('play-info-b').textContent = 'Completado';
         S.bothWatched = true;
         enterDecisionPhase();
@@ -1064,6 +1109,7 @@ async function playSingleVideo() {
 
         // Post-video fixation (300ms)
         await showFixation(300);
+        document.body.classList.remove('cursor-hidden');
 
         // Hide video, show choices
         document.getElementById('phase-a').style.display = 'none';
@@ -1075,30 +1121,11 @@ async function playSingleVideo() {
 function enterDecisionPhase() {
     setPhase('deciding');
 
-    // Set thumbnail sources (same as main videos, paused at start)
-    const thumbA = document.getElementById('vid-a-thumb');
-    const thumbB = document.getElementById('vid-b-thumb');
-    thumbA.src = document.getElementById('vid-a').src;
-    thumbB.src = document.getElementById('vid-b').src;
-    thumbA.currentTime = 0.5;
-    thumbB.currentTime = 0.5;
-
     // Show choices
     document.getElementById('choices-section').style.display = 'block';
 
     // Start decision timer
     S.decisionStartTime = performance.now();
-}
-
-function replayOne(which) {
-    // Replay a single video with audio in the decision phase
-    const vid = which === 'a' ? document.getElementById('vid-a-thumb')
-                               : document.getElementById('vid-b-thumb');
-    vid.muted = false;
-    vid.currentTime = 0;
-    vid.play();
-    S.playCount++;
-    vid.onended = () => { vid.muted = true; };
 }
 
 /* ── API calls ── */
@@ -1136,7 +1163,7 @@ async function loadTrial() {
 
     const pct = (d.index / d.total * 100).toFixed(0);
     document.getElementById('pbar').style.width = pct + '%';
-    document.getElementById('ptxt').textContent = `Ensayo ${d.index + 1} de ${d.total}`;
+    document.getElementById('ptxt').textContent = `Bloque ${d.index + 1} de ${d.total}`;
 
     // Load videos
     const vidA = document.getElementById('vid-a');
@@ -1149,7 +1176,9 @@ async function loadTrial() {
     }
 
     // Reset choice state
-    S.choice = null; S.confidence = null; S.emotion_perceived = null;
+    S.choice = null;
+    S.confidence = null; S.confidence_a = null; S.confidence_b = null;
+    S.emotion_perceived = null;
     document.querySelectorAll('.choice-btn').forEach(b =>
         b.classList.remove('sel-a','sel-b','sel-both-real','sel-both-fake','sel-real','sel-fake'));
     document.querySelectorAll('.conf-btn').forEach(b => b.classList.remove('selected'));
@@ -1157,6 +1186,7 @@ async function loadTrial() {
     document.getElementById('btn-submit').style.display = 'block';
     document.getElementById('feedback').textContent = '';
     document.getElementById('feedback').className = 'feedback';
+    document.body.classList.remove('cursor-hidden');
 
     // Hide choices until video watched
     document.getElementById('choices-section').style.display = 'none';
@@ -1166,18 +1196,28 @@ async function loadTrial() {
     document.getElementById('paired-choices').style.display = S.trialType === 'paired' ? 'grid' : 'none';
     document.getElementById('single-choices').style.display = S.trialType === 'single' ? 'block' : 'none';
 
+    // Show/hide confidence sections based on trial type
+    document.getElementById('conf-single').style.display = S.trialType === 'single' ? 'block' : 'none';
+    document.getElementById('conf-paired').style.display = S.trialType === 'paired' ? 'block' : 'none';
+
+    // Update emotion question label based on trial type
+    const emoLabel = document.getElementById('emotion-label');
+    if (emoLabel) emoLabel.textContent = S.trialType === 'paired'
+        ? '¿Percibiste emoción en alguno de los vídeos?'
+        : '¿Percibiste emoción en el vídeo?';
+
     // Show/hide phase indicator dots
     document.getElementById('phase-indicator').style.display = S.trialType === 'paired' ? 'block' : 'none';
 
-    // Update Video A label depending on trial type
-    const labelA = document.querySelector('#phase-a .video-label');
-    if (labelA) labelA.textContent = S.trialType === 'single' ? 'VIDEO' : 'VIDEO A';
+    // Update Vídeo A label depending on trial type
+    const labelA = document.getElementById('label-phase-a');
+    if (labelA) labelA.textContent = S.trialType === 'single' ? 'VÍDEO' : 'VÍDEO A';
 
     if (S.trialType === 'single') {
         // Single-video trial: show single play button, hide paired controls
         document.getElementById('play-controls').style.display = 'none';
         document.getElementById('single-play-controls').style.display = 'block';
-        document.getElementById('btn-play-single').textContent = '\u25b6 Reproducir Video';
+        document.getElementById('btn-play-single').textContent = '\u25b6 Reproducir Vídeo';
         document.getElementById('phase-a').style.display = 'none';
         document.getElementById('phase-b').style.display = 'none';
         document.getElementById('phase-decide').style.display = 'none';
@@ -1190,17 +1230,21 @@ async function loadTrial() {
 
 async function submitAnswer() {
     const rt = Math.round(performance.now() - (S.decisionStartTime || S.trialStartTime));
+    document.body.classList.remove('cursor-hidden');
 
     // Pause all videos
     document.getElementById('vid-a').pause();
     document.getElementById('vid-b').pause();
-    document.getElementById('vid-a-thumb').pause();
-    document.getElementById('vid-b-thumb').pause();
 
-    // Send all answers at once (choice + confidence + emotion)
+    // Build confidence payload: per-video for paired, single value for single
+    const confPayload = S.trialType === 'paired'
+        ? { confidence_a: S.confidence_a, confidence_b: S.confidence_b,
+            confidence: Math.round((S.confidence_a + S.confidence_b) / 2) }
+        : { confidence: S.confidence, confidence_a: null, confidence_b: null };
+
     const payload = {
         choice: S.choice,
-        confidence: S.confidence,
+        ...confPayload,
         emotion_perceived: S.emotion_perceived,
         reaction_time_ms: rt,
         play_count: S.playCount,
@@ -1218,12 +1262,12 @@ async function submitAnswer() {
     const fb = document.getElementById('feedback');
     if (CFG.show_feedback) {
         const answerLabels = {
-            video_a: 'Video A es real',
-            video_b: 'Video B es real',
+            video_a: 'Vídeo A es real',
+            video_b: 'Vídeo B es real',
             both_real: 'Ambos son reales',
-            both_fake: 'Ambos son falsos',
-            real: 'El video es real',
-            fake: 'El video es generado por IA',
+            both_fake: 'Ambos son generados por IA',
+            real: 'El vídeo es real',
+            fake: 'El vídeo es generado por IA',
         };
         if (d.correct) {
             fb.textContent = '¡Correcto!';
@@ -1284,36 +1328,36 @@ async function showResults() {
 
     // Response pattern analysis (paired trials only)
     if (d.response_pattern && d.response_pattern.paired_count > 0) {
-        html += '<h3>Patrón de respuestas (ensayos con 2 videos)</h3>';
+        html += '<h3>Patrón de respuestas (bloques con 2 vídeos)</h3>';
         html += '<div class="insight">';
         html += `<strong>Sesgo de respuesta:</strong> ${d.response_pattern.bias_description}<br>`;
         html += `<strong>"Ambos reales" seleccionado:</strong> ${d.response_pattern.both_real_count} veces `;
-        html += `(${d.response_pattern.both_real_pct}% de ensayos pareados) — nunca es correcto en este diseño<br>`;
-        html += `<strong>"Ambos falsos" seleccionado:</strong> ${d.response_pattern.both_fake_count} veces `;
+        html += `(${d.response_pattern.both_real_pct}% de bloques pareados) — nunca es correcto en este diseño<br>`;
+        html += `<strong>"Ambos generados por IA" seleccionado:</strong> ${d.response_pattern.both_fake_count} veces `;
         html += `(correctas: ${d.response_pattern.both_fake_correct}/${d.response_pattern.both_fake_count})`;
         html += '</div>';
     }
 
     // SDT metrics
     if (d.sdt_paired) {
-        html += '<h3>Sensibilidad — Ensayos con 2 videos (pareados)</h3>';
+        html += '<h3>Sensibilidad — Bloques con 2 vídeos (pareados)</h3>';
         html += '<div class="insight">';
         html += `<strong>d\' (sensibilidad):</strong> ${d.sdt_paired.d_prime} — `;
         html += d.sdt_paired.d_prime > 1.5 ? 'buena discriminación' :
                 d.sdt_paired.d_prime > 0.5 ? 'discriminación moderada' : 'discriminación pobre';
         html += `<br><strong>Criterio (β):</strong> ${d.sdt_paired.criterion} — `;
-        html += d.sdt_paired.criterion > 0.3 ? 'sesgo conservador (tiende a decir "fake")' :
+        html += d.sdt_paired.criterion > 0.3 ? 'sesgo conservador (tiende a decir "generado por IA")' :
                 d.sdt_paired.criterion < -0.3 ? 'sesgo liberal (tiende a decir "real")' : 'sin sesgo notable';
         html += '</div>';
     }
     if (d.sdt_single) {
-        html += '<h3>Sensibilidad — Ensayos con 1 video (individual)</h3>';
+        html += '<h3>Sensibilidad — Bloques con 1 vídeo (individual)</h3>';
         html += '<div class="insight">';
         html += `<strong>d\' (sensibilidad):</strong> ${d.sdt_single.d_prime} — `;
         html += d.sdt_single.d_prime > 1.5 ? 'buena discriminación' :
                 d.sdt_single.d_prime > 0.5 ? 'discriminación moderada' : 'discriminación pobre';
         html += `<br><strong>Criterio (β):</strong> ${d.sdt_single.criterion} — `;
-        html += d.sdt_single.criterion > 0.3 ? 'sesgo conservador (tiende a decir "fake")' :
+        html += d.sdt_single.criterion > 0.3 ? 'sesgo conservador (tiende a decir "generado por IA")' :
                 d.sdt_single.criterion < -0.3 ? 'sesgo liberal (tiende a decir "real")' : 'sin sesgo notable';
         html += '</div>';
     }
@@ -1392,7 +1436,7 @@ def export_csv():
         "session_id", "participant_id", "age", "gender", "ai_experience",
         "trial_type", "trial_index", "condition", "identity", "emotion", "clip_id",
         "pipeline_a", "pipeline_b", "real_side", "correct_answer",
-        "participant_choice", "correct", "confidence",
+        "participant_choice", "correct", "confidence", "confidence_a", "confidence_b",
         "reaction_time_ms", "play_count", "emotion_perceived",
     ])
 
@@ -1424,6 +1468,8 @@ def export_csv():
                 ans.get("participant_choice", ""),
                 1 if ans.get("correct") else 0,
                 ans.get("confidence", ""),
+                ans.get("confidence_a", ""),
+                ans.get("confidence_b", ""),
                 ans.get("reaction_time_ms", ""),
                 ans.get("play_count", ""),
                 ans.get("emotion_perceived", ""),
@@ -1525,6 +1571,8 @@ def api_answer():
         "participant_choice": choice,
         "correct": is_correct,
         "confidence": data.get("confidence", 1),
+        "confidence_a": data.get("confidence_a"),
+        "confidence_b": data.get("confidence_b"),
         "reaction_time_ms": data.get("reaction_time_ms", 0),
         "play_count": data.get("play_count", 0),
         "emotion_perceived": data.get("emotion_perceived"),
@@ -1606,7 +1654,7 @@ def api_results():
         "video_a": "Sesgo hacia Video A",
         "video_b": "Sesgo hacia Video B",
         "both_real": "Sesgo hacia 'ambos reales'",
-        "both_fake": "Sesgo hacia 'ambos falsos'",
+        "both_fake": "Sesgo hacia 'ambos generados por IA'",
     }
     both_real_answers = [a for a in paired_answers if a["participant_choice"] == "both_real"]
     both_fake_answers = [a for a in paired_answers if a["participant_choice"] == "both_fake"]
